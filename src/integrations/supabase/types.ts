@@ -385,6 +385,7 @@ export type Database = {
           id: string
           industry: string | null
           objectives: string[] | null
+          onboarding_completed: boolean | null
           skills: string[] | null
           updated_at: string | null
           user_id: string
@@ -397,6 +398,7 @@ export type Database = {
           id?: string
           industry?: string | null
           objectives?: string[] | null
+          onboarding_completed?: boolean | null
           skills?: string[] | null
           updated_at?: string | null
           user_id: string
@@ -409,6 +411,7 @@ export type Database = {
           id?: string
           industry?: string | null
           objectives?: string[] | null
+          onboarding_completed?: boolean | null
           skills?: string[] | null
           updated_at?: string | null
           user_id?: string

@@ -38,11 +38,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const { data: profile } = await supabase
         .from('profiles')
-        .select('onboarding_completed')
+        .select('*')
         .eq('user_id', userId)
         .single();
       
-      setNeedsOnboarding(!profile?.onboarding_completed);
+      // Check if profile exists and has onboarding_completed field
+      setNeedsOnboarding(!profile || !(profile as any).onboarding_completed);
     } catch (error) {
       // Profile doesn't exist yet, needs onboarding
       setNeedsOnboarding(true);
