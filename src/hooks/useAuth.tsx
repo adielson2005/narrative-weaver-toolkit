@@ -6,12 +6,14 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  needsOnboarding: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: true,
+  needsOnboarding: false,
 });
 
 export const useAuth = () => {
@@ -30,6 +32,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
+
+  const checkOnboardingStatus = async (userId: string) => {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_completed')
+        .eq('user_id', userId)
+        .single();
+      
+      setNeedsOnboarding(!profile?.onboarding_completed);
+    } catch (error) {
+      // Profile doesn't exist yet, needs onboarding
+      setNeedsOnboarding(true);
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener
@@ -37,6 +55,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Check onboarding status when user logs in
+          setTimeout(() => {
+            checkOnboardingStatus(session.user.id);
+          }, 0);
+        } else {
+          setNeedsOnboarding(false);
+        }
+        
         setLoading(false);
       }
     );
@@ -45,6 +73,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        setTimeout(() => {
+          checkOnboardingStatus(session.user.id);
+        }, 0);
+      }
+      
       setLoading(false);
     });
 
@@ -55,6 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     session,
     loading,
+    needsOnboarding,
   };
 
   return (

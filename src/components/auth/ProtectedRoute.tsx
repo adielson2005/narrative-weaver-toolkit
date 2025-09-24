@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
+  const { user, loading, needsOnboarding } = useAuth();
 
   if (loading) {
     return (
@@ -23,6 +23,11 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+
+  // Redirect to onboarding if user needs to complete it
+  if (needsOnboarding) {
+    return <Navigate to="/onboarding" replace />;
   }
 
   return <>{children}</>;
