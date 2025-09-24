@@ -379,11 +379,15 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          career_level: string | null
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string
           industry: string | null
+          job_title: string | null
+          location: string | null
           objectives: string[] | null
           onboarding_completed: boolean | null
           skills: string[] | null
@@ -392,11 +396,15 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          career_level?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           industry?: string | null
+          job_title?: string | null
+          location?: string | null
           objectives?: string[] | null
           onboarding_completed?: boolean | null
           skills?: string[] | null
@@ -405,11 +413,15 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          career_level?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           industry?: string | null
+          job_title?: string | null
+          location?: string | null
           objectives?: string[] | null
           onboarding_completed?: boolean | null
           skills?: string[] | null
