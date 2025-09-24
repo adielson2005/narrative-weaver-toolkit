@@ -26,7 +26,9 @@ interface Connection {
   created_at: string;
   requester_id: string;
   receiver_id: string;
-  profiles: Profile;
+  connected_at?: string;
+  receiver_profile?: Profile;
+  requester_profile?: Profile;
 }
 
 export default function Connections() {
@@ -86,7 +88,7 @@ export default function Connections() {
         .from("connections")
         .select(`
           *,
-          profiles:requester_id (
+          requester_profile:profiles!connections_requester_id_fkey (
             user_id,
             full_name,
             email,
@@ -119,7 +121,7 @@ export default function Connections() {
         .from("connections")
         .select(`
           *,
-          profiles:receiver_id (
+          receiver_profile:profiles!connections_receiver_id_fkey (
             user_id,
             full_name,
             email,
@@ -292,23 +294,23 @@ export default function Connections() {
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4">
                         <Avatar className="w-12 h-12">
-                          <AvatarImage src={connection.profiles?.avatar_url} />
+                          <AvatarImage src={connection.receiver_profile?.avatar_url} />
                           <AvatarFallback>
-                            {connection.profiles?.full_name?.charAt(0) || 'U'}
+                            {connection.receiver_profile?.full_name?.charAt(0) || 'U'}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold truncate">
-                            {connection.profiles?.full_name}
+                            {connection.receiver_profile?.full_name}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {connection.profiles?.industry || 'Profissional'}
+                            {connection.receiver_profile?.industry || 'Profissional'}
                           </p>
                         </div>
                       </div>
-                      {connection.profiles?.skills && (
+                      {connection.receiver_profile?.skills && (
                         <div className="mt-3 flex flex-wrap gap-1">
-                          {connection.profiles.skills.slice(0, 3).map((skill, index) => (
+                          {connection.receiver_profile.skills.slice(0, 3).map((skill, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
                               {skill}
                             </Badge>
@@ -341,17 +343,17 @@ export default function Connections() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <Avatar className="w-12 h-12">
-                            <AvatarImage src={request.profiles?.avatar_url} />
+                            <AvatarImage src={request.requester_profile?.avatar_url} />
                             <AvatarFallback>
-                              {request.profiles?.full_name?.charAt(0) || 'U'}
+                              {request.requester_profile?.full_name?.charAt(0) || 'U'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-semibold">
-                              {request.profiles?.full_name}
+                              {request.requester_profile?.full_name}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {request.profiles?.industry || 'Profissional'}
+                              {request.requester_profile?.industry || 'Profissional'}
                             </p>
                           </div>
                         </div>
@@ -399,17 +401,17 @@ export default function Connections() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <Avatar className="w-12 h-12">
-                            <AvatarImage src={request.profiles?.avatar_url} />
+                            <AvatarImage src={request.receiver_profile?.avatar_url} />
                             <AvatarFallback>
-                              {request.profiles?.full_name?.charAt(0) || 'U'}
+                              {request.receiver_profile?.full_name?.charAt(0) || 'U'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-semibold">
-                              {request.profiles?.full_name}
+                              {request.receiver_profile?.full_name}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {request.profiles?.industry || 'Profissional'}
+                              {request.receiver_profile?.industry || 'Profissional'}
                             </p>
                           </div>
                         </div>
