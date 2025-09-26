@@ -6,6 +6,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import Auth from "./pages/Auth";
 import ProfessionalGoals from "./pages/ProfessionalGoals";
 import Home from "./pages/Home";
+import Homepage from "./pages/Homepage";
 import Feed from "./pages/Feed";
 import Connections from "./pages/Connections";
 import Jobs from "./pages/Jobs";
@@ -28,6 +29,14 @@ const App = () => (
             <Route path="/onboarding" element={<ProfessionalGoals />} />
             
             {/* Protected routes with layout */}
+            <Route
+              path="/homepage"
+              element={
+                <AppLayout>
+                  <Homepage />
+                </AppLayout>
+              }
+            />
             <Route
               path="/home"
               element={
