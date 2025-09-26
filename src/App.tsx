@@ -1,8 +1,7 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { NavigationProvider } from "@/hooks/useNavigation";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Auth from "./pages/Auth";
 import ProfessionalGoals from "./pages/ProfessionalGoals";
@@ -18,35 +17,73 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <NavigationProvider>
           <Routes>
+            {/* Root route - handled by NavigationProvider */}
+            <Route path="/" element={<div />} />
+            
             {/* Public routes */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<ProfessionalGoals />} />
             
             {/* Protected routes with layout */}
             <Route
-              path="/*"
+              path="/home"
               element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/feed" element={<Feed />} />
-                      <Route path="/connections" element={<Connections />} />
-                      <Route path="/jobs" element={<Jobs />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/settings" element={<div className="p-6"><h1 className="text-2xl font-bold">Configurações - Em breve</h1></div>} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </AppLayout>
-                </ProtectedRoute>
+                <AppLayout>
+                  <Home />
+                </AppLayout>
               }
             />
+            <Route
+              path="/feed"
+              element={
+                <AppLayout>
+                  <Feed />
+                </AppLayout>
+              }
+            />
+            <Route
+              path="/connections"
+              element={
+                <AppLayout>
+                  <Connections />
+                </AppLayout>
+              }
+            />
+            <Route
+              path="/jobs"
+              element={
+                <AppLayout>
+                  <Jobs />
+                </AppLayout>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <AppLayout>
+                  <Profile />
+                </AppLayout>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <AppLayout>
+                  <div className="p-6">
+                    <h1 className="text-2xl font-bold">Configurações - Em breve</h1>
+                  </div>
+                </AppLayout>
+              }
+            />
+            
+            {/* 404 route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </NavigationProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );

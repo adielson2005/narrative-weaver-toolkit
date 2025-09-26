@@ -1,11 +1,11 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Briefcase, MessageSquare, TrendingUp, Award, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user } = useNavigation();
 
   const stats = [
     { icon: Users, label: "Conexões", value: "2.1k+", color: "text-blue-600" },

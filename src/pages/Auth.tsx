@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import { Users, Briefcase, MessageSquare, Eye, EyeOff, AlertCircle } from "lucid
 import { signUpSchema, signInSchema, forgotPasswordSchema } from "@/lib/validations/auth";
 
 export default function Auth() {
-  const { user, loading } = useAuth();
+  const { user, loading, isLoggedIn } = useNavigation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -26,7 +26,7 @@ export default function Auth() {
 
   // Redirect if already authenticated
   if (loading) return <div>Carregando...</div>;
-  if (user) return <Navigate to="/" replace />;
+  if (isLoggedIn) return <Navigate to="/home" replace />;
 
   const validatePassword = (password: string) => {
     const result = signUpSchema.safeParse({ fullName: "Test", email: "test@test.com", password });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,7 @@ const commonSkills = [
 ];
 
 export default function ProfessionalGoals() {
-  const { user } = useAuth();
+  const { user, setOnboardingCompleted } = useNavigation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -100,13 +100,16 @@ export default function ProfessionalGoals() {
 
       if (profileError) throw profileError;
 
+      // Mark onboarding as completed in localStorage
+      setOnboardingCompleted(true);
+
       toast({
         title: "Objetivos profissionais definidos!",
         description: "Seu perfil foi criado com sucesso. Bem-vindo ao ConnectionPro!",
       });
 
       // Redirect to home
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch (error: any) {
       toast({
         title: "Erro ao salvar objetivos",
@@ -252,7 +255,10 @@ export default function ProfessionalGoals() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate("/", { replace: true })}
+                  onClick={() => {
+                    setOnboardingCompleted(true);
+                    navigate("/home", { replace: true });
+                  }}
                   className="flex-1"
                 >
                   Pular por enquanto

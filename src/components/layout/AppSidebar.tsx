@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navigationItems = [
-  { title: "Início", url: "/", icon: Home },
+  { title: "Início", url: "/home", icon: Home },
   { title: "Meu Feed", url: "/feed", icon: MessageSquare },
   { title: "Conexões", url: "/connections", icon: Users },
   { title: "Vagas", url: "/jobs", icon: Briefcase },
@@ -35,6 +35,10 @@ export function AppSidebar() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      
+      // Clear localStorage
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("onboardingCompleted");
       
       toast({
         title: "Logout realizado",
