@@ -105,7 +105,7 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
       } else if (!onboardingCompleted) {
         navigate("/onboarding", { replace: true });
       } else {
-        navigate("/homepage", { replace: true });
+        navigate("/feed", { replace: true });
       }
       return;
     }
@@ -115,14 +115,13 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
       if (!onboardingCompleted) {
         navigate("/onboarding", { replace: true });
       } else {
-        navigate("/homepage", { replace: true });
+        navigate("/feed", { replace: true });
       }
       return;
     }
 
     // Redirect users to auth if trying to access protected routes without login
-    if (currentPath.startsWith("/homepage") || 
-        currentPath.startsWith("/home") || 
+    if (currentPath.startsWith("/home") || 
         currentPath.startsWith("/feed") || 
         currentPath.startsWith("/connections") ||
         currentPath.startsWith("/jobs") ||
@@ -138,9 +137,9 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
       }
     }
 
-    // Redirect to home if trying to access onboarding after completion
+    // Redirect to feed if trying to access onboarding after completion
     if (currentPath === "/onboarding" && isLoggedIn && onboardingCompleted) {
-      navigate("/homepage", { replace: true });
+      navigate("/feed", { replace: true });
     }
 
   }, [loading, isLoggedIn, onboardingCompleted, location.pathname, navigate]);

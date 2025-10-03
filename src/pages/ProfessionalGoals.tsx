@@ -105,11 +105,11 @@ export default function ProfessionalGoals() {
 
       toast({
         title: "Objetivos profissionais definidos!",
-        description: "Seu perfil foi criado com sucesso. Bem-vindo ao ConnectionPro!",
+        description: "Bem-vindo! Vamos explorar sua nova rede profissional.",
       });
 
-      // Redirect to home
-      navigate("/home", { replace: true });
+      // Redirect to feed
+      navigate("/feed", { replace: true });
     } catch (error: any) {
       toast({
         title: "Erro ao salvar objetivos",
@@ -257,7 +257,7 @@ export default function ProfessionalGoals() {
                   variant="outline"
                   onClick={() => {
                     setOnboardingCompleted(true);
-                    navigate("/home", { replace: true });
+                    navigate("/feed", { replace: true });
                   }}
                   className="flex-1"
                 >

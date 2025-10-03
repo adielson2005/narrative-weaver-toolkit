@@ -1,17 +1,74 @@
 import { useNavigation } from "@/hooks/useNavigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Briefcase, MessageSquare, TrendingUp, Award, Calendar } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, Briefcase, MessageSquare, TrendingUp, Award, Calendar, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+interface UserStats {
+  posts_count: number;
+  connections_count: number;
+  likes_received: number;
+  profile_views: number;
+}
 
 export default function Home() {
   const { user } = useNavigation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
-    { icon: Users, label: "Conexões", value: "2.1k+", color: "text-blue-600" },
-    { icon: Briefcase, label: "Vagas Ativas", value: "156", color: "text-green-600" },
-    { icon: MessageSquare, label: "Posts Hoje", value: "34", color: "text-purple-600" },
-    { icon: TrendingUp, label: "Visualizações", value: "890", color: "text-orange-600" },
+  useEffect(() => {
+    if (user) {
+      fetchUserStats();
+    }
+  }, [user]);
+
+  const fetchUserStats = async () => {
+    try {
+      const { data, error } = await supabase
+        .rpc('get_user_stats', { user_uuid: user?.id });
+
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        setStats(data[0]);
+      }
+    } catch (error: any) {
+      console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const displayStats = [
+    { 
+      icon: Users, 
+      label: "Conexões", 
+      value: stats?.connections_count?.toString() || "0", 
+      color: "text-blue-600" 
+    },
+    { 
+      icon: MessageSquare, 
+      label: "Posts", 
+      value: stats?.posts_count?.toString() || "0", 
+      color: "text-purple-600" 
+    },
+    { 
+      icon: TrendingUp, 
+      label: "Curtidas", 
+      value: stats?.likes_received?.toString() || "0", 
+      color: "text-orange-600" 
+    },
+    { 
+      icon: Award, 
+      label: "Visualizações", 
+      value: stats?.profile_views?.toString() || "0", 
+      color: "text-green-600" 
+    },
   ];
 
   const quickActions = [
@@ -61,28 +118,40 @@ export default function Home() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          Bem-vindo de volta! 👋
-        </h1>
-        <p className="text-muted-foreground">
-          Aqui está o que está acontecendo na sua rede profissional hoje.
-        </p>
+      {/* Welcome Hero Section */}
+      <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/5 rounded-lg p-8 border border-primary/20">
+        <div className="max-w-3xl">
+          <h1 className="text-3xl font-bold text-foreground mb-3">
+            Bem-vindo de volta! 👋
+          </h1>
+          <p className="text-muted-foreground text-lg mb-6">
+            Aqui está o que está acontecendo na sua rede profissional hoje.
+          </p>
+          <Button 
+            size="lg" 
+            onClick={() => navigate('/feed')}
+            className="bg-primary hover:bg-primary/90"
+          >
+            Ir para o Feed
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <Card key={index}>
+        {displayStats.map((stat, index) => (
+          <Card key={index} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
-              <div className="flex items-center space-x-2">
-                <div className={`p-2 rounded-lg bg-muted ${stat.color}`}>
-                  <stat.icon className="w-4 h-4" />
+              <div className="flex items-center space-x-3">
+                <div className={`p-3 rounded-lg bg-muted ${stat.color}`}>
+                  <stat.icon className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                  <p className="text-2xl font-bold">{stat.value}</p>
+                  <p className="text-2xl font-bold">
+                    {loading ? "..." : stat.value}
+                  </p>
                 </div>
               </div>
             </CardContent>

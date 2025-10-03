@@ -263,6 +263,49 @@ export type Database = {
           },
         ]
       }
+      likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_comments: {
         Row: {
           author_id: string
@@ -598,6 +641,24 @@ export type Database = {
       }
     }
     Functions: {
+      get_feed_posts: {
+        Args: { posts_limit?: number; posts_offset?: number; user_uuid: string }
+        Returns: {
+          author_avatar: string
+          author_id: string
+          author_job_title: string
+          author_name: string
+          comments_count: number
+          content: string
+          created_at: string
+          id: string
+          likes_count: number
+          media_urls: string[]
+          post_type: string
+          shares_count: number
+          user_has_liked: boolean
+        }[]
+      }
       get_own_profile: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -616,6 +677,15 @@ export type Database = {
           skills: string[]
           updated_at: string
           user_id: string
+        }[]
+      }
+      get_user_stats: {
+        Args: { user_uuid: string }
+        Returns: {
+          connections_count: number
+          likes_received: number
+          posts_count: number
+          profile_views: number
         }[]
       }
     }
