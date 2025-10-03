@@ -14,14 +14,16 @@ export function AppLayout({ children }: AppLayoutProps) {
         <AppSidebar />
         
         <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center border-b border-border bg-card px-4">
-            <SidebarTrigger className="mr-4" />
+          <header className="sticky top-0 z-10 h-16 flex items-center backdrop-blur-sm bg-background/80 border-b border-border/50 px-6 transition-all">
+            <SidebarTrigger className="mr-4 hover:bg-accent rounded-lg transition-colors" />
             <div className="flex-1" />
             {/* Future: Search, notifications, user menu */}
           </header>
           
-          <main className="flex-1 overflow-auto">
-            {children}
+          <main className="flex-1 overflow-auto bg-gradient-to-br from-background via-background to-accent/5">
+            <div className="animate-fade-in">
+              {children}
+            </div>
           </main>
         </div>
       </div>

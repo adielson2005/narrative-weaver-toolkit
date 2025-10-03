@@ -54,23 +54,32 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-14" : "w-60"}>
-      <SidebarContent>
+    <Sidebar className={`${isCollapsed ? "w-16" : "w-64"} border-r border-border/50 transition-all duration-300`}>
+      <SidebarContent className="bg-card/50 backdrop-blur-sm">
         {/* Logo */}
-        <div className="p-4 border-b border-sidebar-border">
+        <div className="p-6 border-b border-border/50">
           {!isCollapsed ? (
-            <h1 className="text-xl font-bold text-sidebar-primary">ConnectionPro</h1>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-primary-foreground font-bold text-lg">C</span>
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                ConnectionPro
+              </h1>
+            </div>
           ) : (
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">C</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg mx-auto">
+              <span className="text-primary-foreground font-bold text-lg">C</span>
             </div>
           )}
         </div>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
+        <SidebarGroup className="px-3 py-4">
+          <SidebarGroupLabel className={`${isCollapsed ? "opacity-0" : "opacity-100"} transition-opacity text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-2`}>
+            Navegação
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1">
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
@@ -78,13 +87,17 @@ export function AppSidebar() {
                       to={item.url}
                       end
                       className={({ isActive }) =>
-                        isActive
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                          : "hover:bg-sidebar-accent/50"
+                        `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 font-medium"
+                            : "hover:bg-accent/80 text-foreground/80 hover:text-foreground"
+                        }`
                       }
                     >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
+                      {!isCollapsed && (
+                        <span className="text-sm font-medium">{item.title}</span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -94,13 +107,16 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Settings and Logout */}
-        <div className="mt-auto p-4 border-t border-sidebar-border">
-          <SidebarMenu>
+        <div className="mt-auto p-3 border-t border-border/50">
+          <SidebarMenu className="space-y-1">
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <NavLink to="/settings" className="hover:bg-sidebar-accent/50">
-                  <Settings className="mr-2 h-4 w-4" />
-                  {!isCollapsed && <span>Configurações</span>}
+                <NavLink 
+                  to="/settings" 
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent/80 transition-all duration-200 text-foreground/80 hover:text-foreground"
+                >
+                  <Settings className="h-5 w-5 flex-shrink-0" />
+                  {!isCollapsed && <span className="text-sm font-medium">Configurações</span>}
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -109,10 +125,10 @@ export function AppSidebar() {
                 variant="ghost"
                 size="sm"
                 onClick={handleSignOut}
-                className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent/50"
+                className="w-full justify-start gap-3 px-3 py-2.5 rounded-lg hover:bg-destructive/10 hover:text-destructive transition-all duration-200 text-foreground/80"
               >
-                <LogOut className="mr-2 h-4 w-4" />
-                {!isCollapsed && <span>Sair</span>}
+                <LogOut className="h-5 w-5 flex-shrink-0" />
+                {!isCollapsed && <span className="text-sm font-medium">Sair</span>}
               </Button>
             </SidebarMenuItem>
           </SidebarMenu>
