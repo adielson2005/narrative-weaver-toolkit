@@ -13,7 +13,6 @@ import { Users, Search, UserPlus, Check, X, Clock } from "lucide-react";
 interface Profile {
   user_id: string;
   full_name: string;
-  email: string;
   avatar_url?: string;
   industry?: string;
   skills?: string[];
@@ -60,7 +59,6 @@ export default function Connections() {
           receiver_profile:profiles!connections_receiver_id_fkey (
             user_id,
             full_name,
-            email,
             avatar_url,
             industry,
             skills
@@ -91,7 +89,6 @@ export default function Connections() {
           requester_profile:profiles!connections_requester_id_fkey (
             user_id,
             full_name,
-            email,
             avatar_url,
             industry,
             skills
@@ -124,7 +121,6 @@ export default function Connections() {
           receiver_profile:profiles!connections_receiver_id_fkey (
             user_id,
             full_name,
-            email,
             avatar_url,
             industry,
             skills
@@ -149,8 +145,8 @@ export default function Connections() {
 
     try {
       const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
+        .from("public_profiles_view")
+        .select("user_id, full_name, avatar_url, industry, skills, job_title")
         .ilike("full_name", `%${searchQuery}%`)
         .neq("user_id", user?.id)
         .limit(20);

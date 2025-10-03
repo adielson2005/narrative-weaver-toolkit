@@ -103,6 +103,13 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
+            foreignKeyName: "connections_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "connections_requester_id_fkey"
             columns: ["requester_id"]
             isOneToOne: false
@@ -114,6 +121,13 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "public_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "connections_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
             referencedColumns: ["user_id"]
           },
         ]
@@ -174,6 +188,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "public_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "education_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
             referencedColumns: ["user_id"]
           },
         ]
@@ -261,6 +282,13 @@ export type Database = {
             referencedRelation: "public_profiles"
             referencedColumns: ["user_id"]
           },
+          {
+            foreignKeyName: "job_positions_posted_by_fkey"
+            columns: ["posted_by"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       likes: {
@@ -302,6 +330,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
             referencedColumns: ["id"]
           },
         ]
@@ -350,6 +385,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "public_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "post_comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
             referencedColumns: ["user_id"]
           },
           {
@@ -409,6 +451,13 @@ export type Database = {
             referencedRelation: "public_profiles"
             referencedColumns: ["user_id"]
           },
+          {
+            foreignKeyName: "post_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       posts: {
@@ -464,6 +513,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "public_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
             referencedColumns: ["user_id"]
           },
         ]
@@ -587,11 +643,66 @@ export type Database = {
             referencedRelation: "public_profiles"
             referencedColumns: ["user_id"]
           },
+          {
+            foreignKeyName: "work_experiences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles_view"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
     }
     Views: {
       public_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          career_level: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          industry: string | null
+          job_title: string | null
+          location: string | null
+          objectives: string[] | null
+          skills: string[] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          career_level?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          industry?: string | null
+          job_title?: string | null
+          location?: string | null
+          objectives?: string[] | null
+          skills?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          career_level?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          industry?: string | null
+          job_title?: string | null
+          location?: string | null
+          objectives?: string[] | null
+          skills?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      public_profiles_view: {
         Row: {
           avatar_url: string | null
           bio: string | null
@@ -674,6 +785,24 @@ export type Database = {
           location: string
           objectives: string[]
           onboarding_completed: boolean
+          skills: string[]
+          updated_at: string
+          user_id: string
+        }[]
+      }
+      get_public_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string
+          bio: string
+          career_level: string
+          created_at: string
+          full_name: string
+          id: string
+          industry: string
+          job_title: string
+          location: string
+          objectives: string[]
           skills: string[]
           updated_at: string
           user_id: string
